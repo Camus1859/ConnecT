@@ -2,10 +2,9 @@ import React from 'react';
 import Nav from './Nav';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Profile from './Profile';
+import ProfileRegister from './Profile';
 import About from './About';
 import NewSearch from './NewSearch';
-import Login from './Login';
 import Logout from './Logout';
 import Error from './Error';
 
@@ -14,8 +13,25 @@ function App() {
         <Router>
             <Nav />
             <Switch>
-                <Route exact path='/'>
-                    <Profile />
+                <Route exact path='/login'>
+                    <ProfileRegister
+                        pageTitle={{
+                            page: 'login',
+                            UserMsg: 'Welcome',
+                            Title:
+                                'Looking for someone? Find out if they are looking for you.',
+                        }}
+                    />
+                </Route>
+
+                <Route exact path='/register'>
+                    <ProfileRegister
+                        pageTitle={{
+                            page: 'register',
+                            UserMsg: 'Sign Up',
+                            Title: 'Are you new?',
+                        }}
+                    />
                 </Route>
 
                 <Route exact path='/new-search'>
@@ -24,10 +40,6 @@ function App() {
 
                 <Route exact path='/About'>
                     <About />
-                </Route>
-
-                <Route exact path='/login'>
-                    <Login />
                 </Route>
 
                 <Route exact path='/logout'>

@@ -1,22 +1,38 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-app.use(cors());
-app.use(express.json({ extended: true }));
-
 const { pool } = require('./src/db/config');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const bcrypt = require('bcrypt');
-const flash = require('express-flash');
+const passport = require('passport');
+
+const initializePassport = require('../passportConfig');
+
+initializePassport(passport);
+
 const PORT = process.env.PORT || 5000;
 
-// app.use(session({
-//     secret:'secret',
-//     resave:false,
-//     saveUninitialized: false,
+app.use(
+    session({
+        secret: 'secret',
+        resave: false,
+        saveUninitialized: true,
+        store: new pgSession({ pool }),
+        cookie: {
+            // secure: true,
+            maxAge: 1000 * 30,
+        },
+    })
+);
 
-// }))
+// app.use(cors())
+
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+app.use(express.json({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // const TWO_HOURS = 1000 * 60 * 60 * 2;
 
@@ -52,32 +68,25 @@ const PORT = process.env.PORT || 5000;
 //     })
 // );
 
-app.post('/login', (req, res) => {
-    console.log('User Enters Email and password to login ');
-    console.log(req.body);
-
-    req.session.userId;
-});
-
 app.post('/signup', async (req, res) => {
     let { username, password, password2 } = req.body;
 
-    let errors = [];
+    let userMessages = { success: [], error: [] };
 
     if (!username || !password || !password2) {
-        errors.push({ message: 'Please enter all fields' });
+        userMessages.error.push('Please enter all fields');
     }
 
     if (password.length < 6) {
-        errors.push({ message: 'Password should be at least 6 characters' });
+        userMessages.error.push('Password should be at least 6 characters');
     }
 
     if (password != password2) {
-        errors.push({ message: 'Passwords do not match' });
+        userMessages.error.push('Passwords do not match');
     }
 
-    if (errors.length > 0) {
-        res.send(errors);
+    if (userMessages.error.length > 0) {
+        res.send(userMessages);
     } else {
         //Form valididation has passed
         let hashpassword = await bcrypt.hash(password, 10);
@@ -93,8 +102,8 @@ app.post('/signup', async (req, res) => {
                 console.log(results.rows);
 
                 if (results.rows.length > 0) {
-                    errors.push({ message: 'Email Already Registered' });
-                    res.send(errors);
+                    userMessages.error.push('Email Already Registered');
+                    res.send(userMessages);
                 } else {
                     pool.query(
                         `INSERT INTO users (user_name, password)
@@ -106,10 +115,11 @@ app.post('/signup', async (req, res) => {
                                 throw err;
                             }
                             console.log('ran');
-                            res.send({
-                                registered_msg:
-                                    'You are now registered, please log in',
-                            });
+                            userMessages.success.push(
+                                'You are now registered, please log in'
+                            );
+
+                            res.send(userMessages);
                         }
                     );
                 }
@@ -118,14 +128,49 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.get('/', (req, res) => {
-    console.log(req.session);
+app.get('/user/profile', (req, res) => {
+    console.log('ppppppppppppppppppppppppppppppp');
 
-    const { userId } = req.session;
-    console.log(userId);
+    console.log(req.originalUrl);
+
+    console.log(req.user);
+
+    // res.send({ user: req.user, path: req.originalUrl });
 });
 
 app.post('/logout', (req, res) => {});
+
+// app.post(
+//     '/login',
+//     passport.authenticate('local', {
+//         successRedirect: '/user/profile',
+//         failureRedirect: '/login',
+//         failureFlash: false,
+//     })
+// );
+
+app.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) {
+        return next(err); // will generate a 500 error
+      }
+      // Generate a JSON response reflecting authentication status
+      if (! user) {
+          console.log(info)
+        return res.status(401).send({ success : false, message : 'authentication failed' });
+      }
+      req.login(user, function(err){
+        if(err){
+          return next(err);
+        }
+        return res.send({ success : true, message : 'authentication succeeded' });
+      });
+    })(req, res, next);
+  });
+
+
+
+
 
 app.listen(PORT, () => {
     console.log('server started on port 5000');

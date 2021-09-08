@@ -13,6 +13,7 @@ const SignupLogin = ({ pageTitle }) => {
     const location = useLocation();
 
     const formSubmitHandler = async (e) => {
+    
         e.preventDefault();
 
         try {

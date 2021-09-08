@@ -6,33 +6,31 @@ function Nav() {
         <nav>
             <ul>
                 <li>
-                    <Link to="/">Profile</Link>
+                    <Link to='/'>Sign Up</Link>
                 </li>
-                
+
                 <li>
-                    <Link to="/about">About</Link>
+                    <Link to='/login'>Login</Link>
                 </li>
-                
-                
+
                 <li>
-                    <Link to="/new-search">New Search</Link>
+                    <Link to='/about'>About</Link>
                 </li>
-                
-                
+
                 <li>
-                    <Link to="/login">Login</Link>
+                    <Link to='/new-search'>New Search</Link>
                 </li>
-                
-                
+
                 <li>
-                    <Link to="/logout">Logout</Link>
+                    <Link to='/user/profile'>Profile</Link>
                 </li>
-                
-                
-                
+{/* 
+                <li>
+                    <Link to='/logout'>Logout</Link>
+                </li> */}
             </ul>
         </nav>
-    )
+    );
 }
 
 export default Nav;

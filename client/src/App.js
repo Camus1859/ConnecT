@@ -1,37 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Nav from './Nav';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import ProfileRegister from './Profile';
+import SignupLogin from './Signup_Login';
 import About from './About';
 import NewSearch from './NewSearch';
-import Logout from './Logout';
-import Error from './Error';
+import Profile from './Profile'
 
 function App() {
     return (
-        <Router>
+        <Router forceRefresh={true}>
             <Nav />
             <Switch>
-                <Route exact path='/login'>
-                    <ProfileRegister
+                <Route exact path='/'>
+                    <SignupLogin
                         pageTitle={{
-                            page: 'login',
-                            UserMsg: 'Welcome',
+                            page: 'signup',
+                            UserMsg: '',
                             Title:
                                 'Looking for someone? Find out if they are looking for you.',
+                            button: 'Sign Up',
                         }}
                     />
                 </Route>
 
-                <Route exact path='/register'>
-                    <ProfileRegister
+                <Route exact path='/login'>
+                    <SignupLogin
                         pageTitle={{
-                            page: 'register',
-                            UserMsg: 'Sign Up',
-                            Title: 'Are you new?',
+                            page: 'login',
+                            UserMsg: 'Sign In',
+                            Title: '',
+                            button: 'Login',
                         }}
                     />
+                </Route>
+
+                <Route exact path='/user/profile'>
+                    <Profile />
                 </Route>
 
                 <Route exact path='/new-search'>
@@ -41,14 +46,14 @@ function App() {
                 <Route exact path='/About'>
                     <About />
                 </Route>
-
+{/*
                 <Route exact path='/logout'>
                     <Logout />
-                </Route>
-
+                </Route> */}
+                {/*
                 <Route exact path='*'>
                     <Error />
-                </Route>
+                </Route> */}
             </Switch>
         </Router>
     );

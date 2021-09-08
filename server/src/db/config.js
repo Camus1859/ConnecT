@@ -12,4 +12,4 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 })
 
-module.exports = pool
+module.exports = { pool }

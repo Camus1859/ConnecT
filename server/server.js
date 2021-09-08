@@ -99,7 +99,6 @@ app.post('/signup', async (req, res) => {
                 if (err) {
                     throw err;
                 }
-                console.log(results.rows);
 
                 if (results.rows.length > 0) {
                     userMessages.error.push('Email Already Registered');
@@ -114,7 +113,6 @@ app.post('/signup', async (req, res) => {
                             if (err) {
                                 throw err;
                             }
-                            console.log('ran');
                             userMessages.success.push(
                                 'You are now registered, please log in'
                             );
@@ -128,49 +126,46 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-app.get('/user/profile', (req, res) => {
-    console.log('ppppppppppppppppppppppppppppppp');
+app.get('/user/logouts', (req, res) => {
+    req.logOut()
+    res.status(200).send({message: ["You are logged out"]})
+    console.log('logged out')
 
-    console.log(req.originalUrl);
-
-    console.log(req.user);
-
-    // res.send({ user: req.user, path: req.originalUrl });
 });
 
-app.post('/logout', (req, res) => {});
+app.post('/logout', (req, res) => {
 
-// app.post(
-//     '/login',
-//     passport.authenticate('local', {
-//         successRedirect: '/user/profile',
-//         failureRedirect: '/login',
-//         failureFlash: false,
-//     })
-// );
+});
 
-app.post('/login', function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) {
-        return next(err); // will generate a 500 error
-      }
-      // Generate a JSON response reflecting authentication status
-      if (! user) {
-          console.log(info)
-        return res.status(401).send({ success : false, message : 'authentication failed' });
-      }
-      req.login(user, function(err){
-        if(err){
-          return next(err);
+app.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+            return next(err); // will generate a 500 error
         }
-        return res.send({ success : true, message : 'authentication succeeded' });
-      });
+        // Generate a JSON response reflecting authentication status
+        if (!user) {
+            console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
+            const updatedInfo =
+                info.message === 'Missing credentials'
+                    ? { error: ['Missing credentials'] }
+                    : info;
+
+            return res.status(401).send(updatedInfo);
+        }
+        req.login(user, function (err) {
+            if (err) {
+                console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
+
+                return next(err);
+            }
+            console.log('noooooooooooooo errorrrrrrrrrrrrrrrrrrrr')
+            console.log(user)
+
+            return res.send(user);
+        });
     })(req, res, next);
-  });
-
-
-
-
+});
 
 app.listen(PORT, () => {
     console.log('server started on port 5000');

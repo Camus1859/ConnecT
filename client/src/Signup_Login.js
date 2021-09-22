@@ -12,6 +12,9 @@ const SignupLogin = ({ pageTitle }) => {
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
     const location = useLocation();
 
+    const clearLocationState = () => {
+        UseLocationState(undefined);
+    };
     const formSubmitHandler = async (e) => {
     
         e.preventDefault();
@@ -81,8 +84,7 @@ const SignupLogin = ({ pageTitle }) => {
 
     return (
         <>
-
-            <UserMessages showUserMsgs={location.state?.msg || showUserMsgs} />
+            <UserMessages showUserMsgs={locationState || showUserMsgs} />
             <div>
                 <h1>{Title}</h1>
                 <h1>Connect</h1>
@@ -128,7 +130,9 @@ const SignupLogin = ({ pageTitle }) => {
                         ''
                     )}
 
-                    <button type='submit'>{button}</button>
+                    <button onClick={clearLocationState} type='submit'>
+                        {button}
+                    </button>
                 </form>
 
                 {page === 'signup' ? (

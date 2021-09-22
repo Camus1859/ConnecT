@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
 
@@ -11,12 +11,13 @@ const SignupLogin = ({ pageTitle }) => {
     const history = useHistory();
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
     const location = useLocation();
+    let [locationState, UseLocationState] = useState(location.state?.msg);
 
     const clearLocationState = () => {
         UseLocationState(undefined);
     };
+
     const formSubmitHandler = async (e) => {
-    
         e.preventDefault();
 
         try {
@@ -31,50 +32,31 @@ const SignupLogin = ({ pageTitle }) => {
             });
 
             if (response.ok) {
-                console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
-
                 const clientResponse = await response.json();
 
-                if(clientResponse.user_name){
-
-                    console.log(clientResponse.user_name)
-
+                if (clientResponse.user_name) {
+                    console.log(clientResponse.user_name);
 
                     history.push({
                         pathname: '/user/profile',
-                        state: {user: clientResponse.user_name }
+                        state: { user: clientResponse.user_name },
                     });
-
-
-
-                }else{
+                } else {
                     if (clientResponse.error.length > 0) {
-                        console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE')
-
                         //show user validation errors
                         SetShowUserMsgs(clientResponse.error);
                     } else {
-                        console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFF')
-
                         // response good and no user, or network error so go to login page and show welcome message
                         history.push('/login', {
                             msg: clientResponse.success,
                         });
                     }
-
                 }
-
-
-
-
             } else {
-                console.log('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
-
                 //some front end error response is not a 200
                 const clientResponse = await response.json();
                 console.log(clientResponse);
                 SetShowUserMsgs(clientResponse.error);
-
             }
         } catch (e) {
             //show User Error(e) network error
@@ -98,7 +80,6 @@ const SignupLogin = ({ pageTitle }) => {
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
                             placeholder='username'
-                            // required
                         />
                     </label>
 
@@ -110,7 +91,6 @@ const SignupLogin = ({ pageTitle }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder='password'
-                            // required
                         />
                     </label>
 
@@ -123,7 +103,6 @@ const SignupLogin = ({ pageTitle }) => {
                                 value={password2}
                                 onChange={(e) => setPassword2(e.target.value)}
                                 placeholder='password'
-                                // required
                             />
                         </label>
                     ) : (

@@ -127,25 +127,19 @@ app.post('/signup', async (req, res) => {
 });
 
 app.get('/user/logouts', (req, res) => {
-    req.logOut()
-    res.status(200).send({message: ["You are logged out"]})
-    console.log('logged out')
-
+    req.logOut();
+    res.status(200).send({ message: ['You are logged out'] });
 });
 
-app.post('/logout', (req, res) => {
-
-});
+app.post('/logout', (req, res) => {});
 
 app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
         if (err) {
-            console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
             return next(err); // will generate a 500 error
         }
         // Generate a JSON response reflecting authentication status
         if (!user) {
-            console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
             const updatedInfo =
                 info.message === 'Missing credentials'
                     ? { error: ['Missing credentials'] }
@@ -155,17 +149,28 @@ app.post('/login', function (req, res, next) {
         }
         req.login(user, function (err) {
             if (err) {
-                console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
-
                 return next(err);
             }
-            console.log('noooooooooooooo errorrrrrrrrrrrrrrrrrrrr')
-            console.log(user)
 
             return res.send(user);
         });
     })(req, res, next);
 });
+
+const checkAuth = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        //display profile page
+    }
+
+    next();
+};
+
+const checkNotAuth = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    //send user to login page
+};
 
 app.listen(PORT, () => {
     console.log('server started on port 5000');

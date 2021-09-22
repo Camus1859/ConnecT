@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import SignupLogin from './Signup_Login';
 import About from './About';
 import NewSearch from './NewSearch';
-import Profile from './Profile'
+import Profile from './Profile';
 
 function App() {
     return (
@@ -46,7 +46,7 @@ function App() {
                 <Route exact path='/About'>
                     <About />
                 </Route>
-{/*
+                {/*
                 <Route exact path='/logout'>
                     <Logout />
                 </Route> */}

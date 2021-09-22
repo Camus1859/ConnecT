@@ -44,17 +44,18 @@ CREATE TABLE searches (
     time_id INT,
     height_id INT,
     PRIMARY KEY(searches_id),
-    
+
     FOREIGN KEY(user_id)
         REFERENCES users(user_id),
-        
+
     FOREIGN KEY(address_id)
         REFERENCES addresses(address_id),
-        
+
     FOREIGN KEY(time_id)
         REFERENCES times(time_id),
-        
+
     FOREIGN KEY(height_id)
         REFERENCES heights(height_id)
 );
+
 

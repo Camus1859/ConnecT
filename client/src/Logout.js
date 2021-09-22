@@ -9,8 +9,6 @@ const Logout = () => {
     const location = useLocation();
 
     const formSubmitHandler = async (e) => {
-        console.log('bbbbbbbbbbbbbb');
-
         e.preventDefault();
 
         try {
@@ -21,28 +19,16 @@ const Logout = () => {
                     Accept: 'application/json',
                 },
             });
-            console.log('oooooooooooooooooooooooooooooo');
 
             if (response.ok) {
                 const clientResponse = await response.json();
 
-                console.log('rannnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
-
                 history.push('/login', {
                     msg: clientResponse.message,
                 });
-
-
-                // history.push({
-                //     pathname: '/login',
-                //     state: {msg: SetShowUserMsgs(clientResponse.message)}
-                // });
-
             }
         } catch (e) {
             //show User Error(e) network error
-            console.log('jjjjjjjjjjjjjjjjjjjjjjjj');
-            console.log(e);
         }
     };
 

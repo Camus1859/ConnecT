@@ -39,7 +39,7 @@ function App() {
                     <Profile />
                 </Route>
 
-                <Route exact path='/new-search'>
+                <Route exact path='/search'>
                     <NewSearch />
                 </Route>
 

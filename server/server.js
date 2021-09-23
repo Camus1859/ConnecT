@@ -13,15 +13,19 @@ initializePassport(passport);
 
 const PORT = process.env.PORT || 5000;
 
+const twoHours = 1000 * 60 * 60 * 2;
+
 app.use(
     session({
         secret: 'secret',
+        name: 'sid',
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         store: new pgSession({ pool }),
         cookie: {
             // secure: true,
-            maxAge: 1000 * 30,
+            maxAge: twoHours,
+            sameSite: 'true',
         },
     })
 );
@@ -126,12 +130,50 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+const reDirectLogin = (req, res, next) => {
+    console.log(req.session);
+
+    if (req.session.userId === undefined) {
+        return res.status(201).send({ error: ['Please login'] });
+    }
+    console.log('next ran');
+    next();
+};
+
 app.get('/user/logouts', (req, res) => {
     req.logOut();
     res.status(200).send({ message: ['You are logged out'] });
 });
 
 app.post('/logout', (req, res) => {});
+
+
+app.get('/search', reDirectLogin, (req, res)=> {
+
+    console.log('search ran')
+
+    console.log(req.body)
+
+})
+
+app.get('/user/profile', reDirectLogin, (req, res) => {
+    let { id } = req.body;
+
+    pool.query(
+        `
+    SELECT * FROM users WHERE  id = $1`,
+        [id],
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.log(results);
+            console.log(req.body.user_name);
+        }
+    );
+
+    // return res.status(201).send({ welcomeMsg:[], error: [] });
+});
 
 app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
@@ -152,25 +194,15 @@ app.post('/login', function (req, res, next) {
                 return next(err);
             }
 
+            req.session.userId = user.id;
+
+            // res.writeHead(200, {'Set-Cookie': })
             return res.send(user);
         });
     })(req, res, next);
 });
 
-const checkAuth = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        //display profile page
-    }
-
-    next();
-};
-
-const checkNotAuth = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    //send user to login page
-};
+const checkAuth = (req, res, next) => {};
 
 app.listen(PORT, () => {
     console.log('server started on port 5000');

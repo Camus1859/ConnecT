@@ -1,61 +1,56 @@
 CREATE DATABASE connect;
 
 CREATE TABLE users (
-    user_id INT NOT NULL,
+    user_id serial PRIMARY KEY,
     firstName varchar(255),
     lastName varchar(255),
+    user_name varchar(255) UNIQUE,
     img varchar(255),
-    passwords varchar(255),
-    bio varchar(1000),
-    PRIMARY KEY(user_id)
+    password varchar(255),
+    bio varchar(1000)
 );
 
 CREATE TABLE addresses (
-    address_id INT NOT NULL,
+    address_id serial PRIMARY KEY,
     latitude INT,
-    longitude INT,
-    PRIMARY KEY(address_id)
+    longitude INT
 );
 
-CREATE TABLE   demographics (
-    demographic_id INT NOT NULL,
+CREATE TABLE  demographics (
+    demographic_id serial PRIMARY KEY,
     sex varchar,
-    race varchar,
-    PRIMARY KEY(demographic_id)
+    race varchar
 );
 
 CREATE TABLE times (
-    time_id INT NOT NULL,
+    time_id serial PRIMARY KEY,
     time time,
-    date date,
-    PRIMARY KEY(time_id)
+    date date
 );
 
 CREATE TABLE heights (
-    height_id INT NOT NULL,
-    inches INT,
-    PRIMARY KEY(height_id)
+    height_id serial PRIMARY KEY,
+    inches INT
 );
 
 CREATE TABLE searches (
-    searches_id INT NOT NULL,
-    user_id INT,
-    address_id INT,
-    time_id INT,
-    height_id INT,
-    PRIMARY KEY(searches_id),
+    searches_id serial PRIMARY KEY,
+    user_id INT NOT NULL,
+    address_id INT NOT NULL,
+    time_id INT NOT NULL,
+    height_id INT NOT NULL,
 
     FOREIGN KEY(user_id)
-        REFERENCES users(user_id),
+        REFERENCES users (user_id),
 
     FOREIGN KEY(address_id)
-        REFERENCES addresses(address_id),
+        REFERENCES addresses (address_id),
 
     FOREIGN KEY(time_id)
-        REFERENCES times(time_id),
+        REFERENCES times (time_id),
 
     FOREIGN KEY(height_id)
-        REFERENCES heights(height_id)
+        REFERENCES heights (height_id)
 );
 
 

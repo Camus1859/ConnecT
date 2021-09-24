@@ -23,9 +23,9 @@ app.use(
         saveUninitialized: false,
         store: new pgSession({ pool }),
         cookie: {
-            // secure: true,
+            //  secure: true,
             maxAge: twoHours,
-            sameSite: 'true',
+            sameSite: true,
         },
     })
 );
@@ -111,7 +111,7 @@ app.post('/signup', async (req, res) => {
                     pool.query(
                         `INSERT INTO users (user_name, password)
                         VALUES ($1, $2)
-                        RETURNING id, password`,
+                        RETURNING user_id, password`,
                         [username, hashpassword],
                         (err, results) => {
                             if (err) {
@@ -131,6 +131,7 @@ app.post('/signup', async (req, res) => {
 });
 
 const reDirectLogin = (req, res, next) => {
+    console.log('redirect ran');
     console.log(req.session);
 
     if (req.session.userId === undefined) {
@@ -147,37 +148,48 @@ app.get('/user/logouts', (req, res) => {
 
 app.post('/logout', (req, res) => {});
 
+app.get('/search', reDirectLogin, (req, res) => {
+    console.log(
+        'search ran, looking to get user somehow to send back to front end to show search '
+    );
 
-app.get('/search', reDirectLogin, (req, res)=> {
+    console.log(req.user.user_name);
 
-    console.log('search ran')
-
-    console.log(req.body)
-
-})
+    res.status(200).send({ user: [req.user.user_name], error: [] });
+});
 
 app.get('/user/profile', reDirectLogin, (req, res) => {
-    let { id } = req.body;
+    const id = req.session.userId;
+    console.log(req.session.userId);
+    let user;
 
     pool.query(
         `
-    SELECT * FROM users WHERE  id = $1`,
+    SELECT user_name FROM users WHERE  user_id = $1`,
         [id],
         (err, results) => {
             if (err) {
                 throw err;
             }
-            console.log(results);
-            console.log(req.body.user_name);
+
+            if (results.rows.length === 0) {
+                //  user not found send to front end
+            }
+
+            console.log('UserFOunddddddddddddddddddddddddddd');
+
+            console.log(results.rows[0].user_name);
+            return res
+                .status(201)
+                .send({ user: results.rows[0].user_name, error: [] });
         }
     );
-
-    // return res.status(201).send({ welcomeMsg:[], error: [] });
 });
 
 app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
         if (err) {
+            console.log('mmmmmmmmmmZZZZZZZZZz');
             return next(err); // will generate a 500 error
         }
         // Generate a JSON response reflecting authentication status
@@ -191,10 +203,12 @@ app.post('/login', function (req, res, next) {
         }
         req.login(user, function (err) {
             if (err) {
+                console.log('ppppppppYYYYYYYYYYYYYy');
+
                 return next(err);
             }
 
-            req.session.userId = user.id;
+            req.session.userId = user.user_id;
 
             // res.writeHead(200, {'Set-Cookie': })
             return res.send(user);

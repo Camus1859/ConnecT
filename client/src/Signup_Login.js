@@ -18,10 +18,11 @@ const SignupLogin = ({ pageTitle }) => {
     };
 
     const formSubmitHandler = async (e) => {
+        console.log('a')
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:5000/${page}`, {
+            const response = await fetch(`/${page}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

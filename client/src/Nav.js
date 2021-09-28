@@ -7,6 +7,7 @@ function Nav() {
     const [isLoggedIn, setIsLoggedIn] = useState([false]);
     const location = useLocation();
     const history = useHistory();
+    let [locationState, UseLocationState] = useState(location.state?.msg);
 
     const fetchSearchPage = async (e) => {
         e.preventDefault();
@@ -31,7 +32,9 @@ function Nav() {
 
                 if (clientResponse.error.length > 0) {
                     //show user validation errors
-                    SetShowUserMsgs(clientResponse.error);
+                   history.push('/login', {
+                    msg: clientResponse.error,
+                });
                 }else{
 
                      // response good and no user, or network error
@@ -73,7 +76,9 @@ function Nav() {
 
                 if (clientResponse.error.length > 0) {
                     //show user validation errors
-                    SetShowUserMsgs(clientResponse.error);
+                    history.push('/login', {
+                        msg: clientResponse.error,
+                    });
                 } else {
                     // response good and no user, or network error so go to search page, with Welcome message
 

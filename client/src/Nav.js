@@ -9,9 +9,51 @@ function Nav() {
     const history = useHistory();
     let [locationState, UseLocationState] = useState(location.state?.msg);
 
+    const fetchLoginPage = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('/login', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    credentials: 'include',
+                },
+            });
+
+            if (response.ok) {
+                const clientResponse = await response.json();
+
+                console.log(clientResponse);
+
+                if (clientResponse.isLoggedIn) {
+                    // response good  user is logged in
+
+                    history.push({
+                        pathname: '/user/profile',
+                        state: { user: clientResponse.user_name },
+                    });
+                } else {
+                    // response good and user needs to login
+
+                    history.push({
+                        pathname: '/login',
+                    });
+                }
+            } else {
+                //some front end error response is not a 200
+                const clientResponse = await response.json();
+                SetShowUserMsgs(clientResponse.error);
+            }
+        } catch (e) {
+            //show User Error(e) network error
+            console.log(e);
+        }
+    };
+
     const fetchSearchPage = async (e) => {
         e.preventDefault();
-        console.log('search fetch ran')
         try {
             const response = await fetch('/search', {
                 method: 'GET',
@@ -25,26 +67,21 @@ function Nav() {
             if (response.ok) {
                 const clientResponse = await response.json();
 
-
                 console.log(clientResponse);
-
 
                 if (clientResponse.error.length > 0) {
                     //show user validation errors
-                   history.push('/login', {
-                    msg: clientResponse.error,
-                });
-                }else{
+                    history.push('/login', {
+                        msg: clientResponse.error,
+                    });
+                } else {
+                    // response good and no user, or network error
 
-                     // response good and no user, or network error
-
-                history.push({
-                    pathname: '/search',
-                    state: { user: clientResponse.user },
-                });
-
+                    history.push({
+                        pathname: '/search',
+                        state: { user: clientResponse.user },
+                    });
                 }
-
             } else {
                 //some front end error response is not a 200
                 const clientResponse = await response.json();
@@ -81,10 +118,10 @@ function Nav() {
                 } else {
                     // response good and no user, or network error so go to search page, with Welcome message
 
-                    console.log(clientResponse.user)
+                    console.log(clientResponse.user);
                     history.push({
-                        pathname:'/user/profile',
-                        state: {user: clientResponse.user},
+                        pathname: '/user/profile',
+                        state: { user: clientResponse.user },
                     });
                 }
             } else {
@@ -107,8 +144,9 @@ function Nav() {
                         <Link to='/'>Sign Up</Link>
                     </li>
 
-                    <li>
-                        <Link to='/login'>Login</Link>
+                    <li onClick={fetchLoginPage}>
+                        Login
+                        {/* <Link to='/login'>Login</Link> */}
                     </li>
 
                     <li>

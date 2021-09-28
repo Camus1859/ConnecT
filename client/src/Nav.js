@@ -24,7 +24,6 @@ function Nav() {
 
             if (response.ok) {
                 const clientResponse = await response.json();
-                console.log('ZZZZZZZZZZZ')
 
 
                 console.log(clientResponse);
@@ -102,7 +101,6 @@ function Nav() {
 
     return (
         <>
-            <UserMessages showUserMsgs={showUserMsgs} />
             <nav>
                 <ul>
                     <li>

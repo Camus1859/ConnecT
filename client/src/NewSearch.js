@@ -6,8 +6,8 @@ const NewSearch = () => {
 
     return (
         <>
-            <h1>New Search by user </h1>
-            <h2>{location.state?.user}</h2>
+            <h1>New Search</h1>
+            <p>{location.state?.user}</p>
         </>
     );
 };

@@ -12,7 +12,7 @@ function App() {
         <Router forceRefresh={true}>
             <Nav />
             <Switch>
-                <Route exact path='/'>
+                <Route exact path='/signup'>
                     <SignupLogin
                         pageTitle={{
                             page: 'signup',

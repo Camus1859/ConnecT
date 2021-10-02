@@ -187,13 +187,11 @@ app.get('/login', (req, res) => {
                 console.log('UserFOunddddddddddddddddddddddddddd');
 
                 console.log(results.rows[0].user_name);
-                return res
-                    .status(201)
-                    .send({
-                        user_name: results.rows[0].user_name,
-                        error: [],
-                        isLoggedIn: true,
-                    });
+                return res.status(201).send({
+                    user_name: results.rows[0].user_name,
+                    error: [],
+                    isLoggedIn: true,
+                });
             }
         );
     } else {

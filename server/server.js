@@ -222,8 +222,6 @@ app.post('/user/logouts', reDirectLogin, (req, res) => {
     res.status(200).send({ message: ['You are logged out'] });
 });
 
-app.post('/logout', (req, res) => {});
-
 app.get('/search', reDirectLogin, (req, res) => {
     console.log(
         'search ran, looking to get user somehow to send back to front end to show search '
@@ -291,8 +289,6 @@ app.post('/login', function (req, res, next) {
         });
     })(req, res, next);
 });
-
-const checkAuth = (req, res, next) => {};
 
 app.listen(PORT, () => {
     console.log('server started on port 5000');

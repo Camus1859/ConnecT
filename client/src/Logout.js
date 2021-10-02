@@ -13,7 +13,7 @@ const Logout = () => {
 
         try {
             const response = await fetch('/user/logouts', {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',

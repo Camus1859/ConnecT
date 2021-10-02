@@ -178,8 +178,14 @@ const reDirectLogin = (req, res, next) => {
     next();
 };
 
-app.get('/user/logouts', (req, res) => {
+app.post('/user/logouts', reDirectLogin, (req, res) => {
     req.logOut();
+    req.session.destroy((err) => {
+        if (err) {
+            res.status(200).send({ err: [err] });
+        }
+    });
+    res.clearCookie('sid');
     res.status(200).send({ message: ['You are logged out'] });
 });
 

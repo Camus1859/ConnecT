@@ -130,6 +130,41 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+app.get('/signup', (req, res) => {
+    if (req.session.userId !== undefined) {
+        const id = req.session.userId;
+        console.log(req.session.userId);
+        let user;
+
+        pool.query(
+            `
+        SELECT user_name FROM users WHERE  user_id = $1`,
+            [id],
+            (err, results) => {
+                if (err) {
+                    throw err;
+                }
+
+                if (results.rows.length === 0) {
+                    //  user not found send to front end
+                }
+
+                console.log('UserFOunddddddddddddddddddddddddddd');
+
+                console.log(results.rows[0].user_name);
+                return res.status(201).send({
+                    user_name: results.rows[0].user_name,
+                    error: [],
+                    isLoggedIn: true,
+                });
+            }
+        );
+    } else {
+        //user not logged in
+        return res.status(201).send({ isLoggedIn: false });
+    }
+});
+
 app.get('/login', (req, res) => {
     if (req.session.userId !== undefined) {
         const id = req.session.userId;

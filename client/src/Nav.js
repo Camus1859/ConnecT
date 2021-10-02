@@ -4,16 +4,15 @@ import UserMessages from './UserMessages';
 
 function Nav() {
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
-    const [isLoggedIn, setIsLoggedIn] = useState([false]);
-    const location = useLocation();
     const history = useHistory();
-    let [locationState, UseLocationState] = useState(location.state?.msg);
 
-    const fetchLoginPage = async (e) => {
+
+    const fetchSignUpOrLoginPage = async (e, signUpOrLoginPath) => {
+
         e.preventDefault();
 
         try {
-            const response = await fetch('/login', {
+            const response = await fetch(`${signUpOrLoginPath}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,9 +35,10 @@ function Nav() {
                     });
                 } else {
                     // response good and user needs to login
+                    console.log(`user must sign in to path ${signUpOrLoginPath}`)
 
                     history.push({
-                        pathname: '/login',
+                        pathname:`${signUpOrLoginPath}`,
                     });
                 }
             } else {
@@ -52,53 +52,12 @@ function Nav() {
         }
     };
 
-    const fetchSearchPage = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('/search', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    credentials: 'include',
-                },
-            });
 
-            if (response.ok) {
-                const clientResponse = await response.json();
-
-                console.log(clientResponse);
-
-                if (clientResponse.error.length > 0) {
-                    //show user validation errors
-                    history.push('/login', {
-                        msg: clientResponse.error,
-                    });
-                } else {
-                    // response good and no user, or network error
-
-                    history.push({
-                        pathname: '/search',
-                        state: { user: clientResponse.user },
-                    });
-                }
-            } else {
-                //some front end error response is not a 200
-                const clientResponse = await response.json();
-                console.log(clientResponse);
-                SetShowUserMsgs(clientResponse.error);
-            }
-        } catch (e) {
-            //show User Error(e) network error
-            console.log(e);
-        }
-    };
-
-    const fetchProfilePage = async (e) => {
+    const fetchSearchPageOrProfilePage = async (e, searchOrUserProfilePath) => {
         e.preventDefault();
 
         try {
-            const response = await fetch('/user/profile', {
+            const response = await fetch(searchOrUserProfilePath, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +79,7 @@ function Nav() {
 
                     console.log(clientResponse.user);
                     history.push({
-                        pathname: '/user/profile',
+                        pathname: searchOrUserProfilePath,
                         state: { user: clientResponse.user },
                     });
                 }
@@ -140,22 +99,17 @@ function Nav() {
         <>
             <nav>
                 <ul>
-                    <li>
-                        <Link to='/'>Sign Up</Link>
-                    </li>
+                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/signup')}>Sign Up</li>
 
-                    <li onClick={fetchLoginPage}>
-                        Login
-                        {/* <Link to='/login'>Login</Link> */}
-                    </li>
+                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/login')}>Login</li>
 
                     <li>
                         <Link to='/about'>About</Link>
                     </li>
 
-                    <li onClick={fetchSearchPage}> New Search</li>
+                    <li onClick={(e) => fetchSearchPageOrProfilePage(e, '/search')}> New Search</li>
 
-                    <li onClick={fetchProfilePage}> Profile </li>
+                    <li onClick={(e) => fetchSearchPageOrProfilePage(e, '/user/profile')}> Profile </li>
                 </ul>
             </nav>
         </>

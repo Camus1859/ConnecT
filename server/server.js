@@ -226,9 +226,13 @@ app.get('/search', reDirectLogin, (req, res) => {
     console.log(
         'search ran, looking to get user somehow to send back to front end to show search '
     );
+    res.status(200).send({ user: [req.user.user_name], error: [] });
+});
 
-    console.log(req.user.user_name);
-
+app.get('/messages', reDirectLogin, (req, res) => {
+    console.log(
+        'search ran, looking to get user somehow to send back to front end to show search '
+    );
     res.status(200).send({ user: [req.user.user_name], error: [] });
 });
 

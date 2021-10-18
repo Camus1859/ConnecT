@@ -290,6 +290,10 @@ app.post('/login', function (req, res, next) {
     })(req, res, next);
 });
 
+app.get('/user/login', (req, res) => {
+    res.status(200).send(Boolean(req.session.userId));
+});
+
 app.listen(PORT, () => {
     console.log('server started on port 5000');
 });

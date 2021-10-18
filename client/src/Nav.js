@@ -74,7 +74,10 @@ function Nav() {
         }
     };
 
-    const fetchSearchPageOrProfilePage = async (e, searchOrUserProfilePath) => {
+    const fetchSearchPageOrProfilePageOrMessages = async (
+        e,
+        searchOrUserProfilePath
+    ) => {
         e.preventDefault();
 
         try {
@@ -135,7 +138,10 @@ function Nav() {
                     {loggedIn ? (
                         <li
                             onClick={(e) =>
-                                fetchSearchPageOrProfilePage(e, '/search')
+                                fetchSearchPageOrProfilePageOrMessages(
+                                    e,
+                                    '/search'
+                                )
                             }
                         >
                             {' '}
@@ -148,11 +154,30 @@ function Nav() {
                     {loggedIn ? (
                         <li
                             onClick={(e) =>
-                                fetchSearchPageOrProfilePage(e, '/user/profile')
+                                fetchSearchPageOrProfilePageOrMessages(
+                                    e,
+                                    '/user/profile'
+                                )
                             }
                         >
                             {' '}
                             Profile{' '}
+                        </li>
+                    ) : (
+                        ''
+                    )}
+
+                    {loggedIn ? (
+                        <li
+                            onClick={(e) =>
+                                fetchSearchPageOrProfilePageOrMessages(
+                                    e,
+                                    '/messages'
+                                )
+                            }
+                        >
+                            {' '}
+                            Messages{' '}
                         </li>
                     ) : (
                         ''

@@ -6,6 +6,8 @@ import SignupLogin from './Signup_Login';
 import About from './About';
 import NewSearch from './NewSearch';
 import Profile from './Profile';
+import Messages from './Messages';
+
 
 function App() {
     return (
@@ -46,6 +48,12 @@ function App() {
                 <Route exact path='/About'>
                     <About />
                 </Route>
+
+                <Route exact path='/messages'>
+                    <Messages />
+                </Route>
+
+
                 {/*
                 <Route exact path='/logout'>
                     <Logout />

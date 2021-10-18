@@ -5,7 +5,28 @@ import UserMessages from './UserMessages';
 function Nav() {
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
     const history = useHistory();
+    const [loggedIn, setLoggedIn] = useState(false);
 
+    useEffect(() => {
+        const checkIfUserIsLoggedIn = async () => {
+            try {
+                const response = await fetch('/user/login', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        credentials: 'include',
+                    },
+                });
+
+                const clientResponse = await response.json();
+                setLoggedIn(clientResponse);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        checkIfUserIsLoggedIn();
+    });
 
     const fetchSignUpOrLoginPage = async (e, signUpOrLoginPath) => {
 

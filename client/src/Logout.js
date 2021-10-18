@@ -36,9 +36,7 @@ const Logout = () => {
         <>
             <UserMessages showUserMsgs={location.state?.msg || showUserMsgs} />
 
-            <form onSubmit={formSubmitHandler}>
-                <button type='submit'>Logout</button>
-            </form>
+            <li onClick={formSubmitHandler}>Logout</li>
         </>
     );
 };

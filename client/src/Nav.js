@@ -182,6 +182,12 @@ function Nav() {
                     ) : (
                         ''
                     )}
+
+                    {loggedIn ? (
+                      <Logout/>
+                    ) : (
+                        ''
+                    )}
                 </ul>
             </nav>
         </>

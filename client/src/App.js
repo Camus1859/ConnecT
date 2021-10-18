@@ -52,16 +52,6 @@ function App() {
                 <Route exact path='/messages'>
                     <Messages />
                 </Route>
-
-
-                {/*
-                <Route exact path='/logout'>
-                    <Logout />
-                </Route> */}
-                {/*
-                <Route exact path='*'>
-                    <Error />
-                </Route> */}
             </Switch>
         </Router>
     );

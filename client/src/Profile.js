@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Logout from './Logout';
+// import Logout from './Logout';
 
 const Profile = () => {
     const location = useLocation();
@@ -10,7 +10,7 @@ const Profile = () => {
 
     return (
         <>
-            <div>{location.state?.user ? <Logout /> : ''}</div>
+            {/* <div>{location.state?.user ? <Logout /> : ''}</div> */}
             <p>Welcome {location.state?.user} !</p>
         </>
     );

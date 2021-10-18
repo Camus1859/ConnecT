@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
+import Logout from './Logout';
+
 
 function Nav() {
     const [showUserMsgs, SetShowUserMsgs] = useState([]);

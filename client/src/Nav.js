@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
 
@@ -29,7 +29,6 @@ function Nav() {
     });
 
     const fetchSignUpOrLoginPage = async (e, signUpOrLoginPath) => {
-
         e.preventDefault();
 
         try {
@@ -56,10 +55,12 @@ function Nav() {
                     });
                 } else {
                     // response good and user needs to login
-                    console.log(`user must sign in to path ${signUpOrLoginPath}`)
+                    console.log(
+                        `user must sign in to path ${signUpOrLoginPath}`
+                    );
 
                     history.push({
-                        pathname:`${signUpOrLoginPath}`,
+                        pathname: `${signUpOrLoginPath}`,
                     });
                 }
             } else {
@@ -72,7 +73,6 @@ function Nav() {
             console.log(e);
         }
     };
-
 
     const fetchSearchPageOrProfilePage = async (e, searchOrUserProfilePath) => {
         e.preventDefault();
@@ -120,9 +120,13 @@ function Nav() {
         <>
             <nav>
                 <ul>
-                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/signup')}>Sign Up</li>
+                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/signup')}>
+                        Sign Up
+                    </li>
 
-                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/login')}>Login</li>
+                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/login')}>
+                        Login
+                    </li>
 
                     <li>
                         <Link to='/about'>About</Link>

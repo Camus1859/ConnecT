@@ -107,9 +107,31 @@ function Nav() {
                         <Link to='/about'>About</Link>
                     </li>
 
-                    <li onClick={(e) => fetchSearchPageOrProfilePage(e, '/search')}> New Search</li>
+                    {loggedIn ? (
+                        <li
+                            onClick={(e) =>
+                                fetchSearchPageOrProfilePage(e, '/search')
+                            }
+                        >
+                            {' '}
+                            New Search
+                        </li>
+                    ) : (
+                        ''
+                    )}
 
-                    <li onClick={(e) => fetchSearchPageOrProfilePage(e, '/user/profile')}> Profile </li>
+                    {loggedIn ? (
+                        <li
+                            onClick={(e) =>
+                                fetchSearchPageOrProfilePage(e, '/user/profile')
+                            }
+                        >
+                            {' '}
+                            Profile{' '}
+                        </li>
+                    ) : (
+                        ''
+                    )}
                 </ul>
             </nav>
         </>

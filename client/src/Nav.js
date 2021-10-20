@@ -199,11 +199,7 @@ function Nav() {
                         ''
                     )}
 
-                    {loggedIn ? (
-                      <Logout/>
-                    ) : (
-                        ''
-                    )}
+                    {loggedIn ? <Logout /> : ''}
                 </ul>
             </nav>
         </>

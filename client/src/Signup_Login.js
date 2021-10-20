@@ -80,7 +80,7 @@ const SignupLogin = ({ pageTitle }) => {
                             name='username'
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
-                            placeholder='username'
+                            placeholder='Enter Your Username'
                         />
                     </label>
 
@@ -91,7 +91,7 @@ const SignupLogin = ({ pageTitle }) => {
                             name='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder='password'
+                            placeholder='Enter Your Password'
                         />
                     </label>
 
@@ -103,7 +103,7 @@ const SignupLogin = ({ pageTitle }) => {
                                 name='password2'
                                 value={password2}
                                 onChange={(e) => setPassword2(e.target.value)}
-                                placeholder='password'
+                                placeholder='Reenter Your Password'
                             />
                         </label>
                     ) : (

@@ -125,13 +125,27 @@ function Nav() {
         <>
             <nav>
                 <ul>
-                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/signup')}>
-                        Sign Up
-                    </li>
+                    {!loggedIn ? (
+                        <li
+                            onClick={(e) =>
+                                fetchSignUpOrLoginPage(e, '/signup')
+                            }
+                        >
+                            Sign Up
+                        </li>
+                    ) : (
+                        ''
+                    )}
 
-                    <li onClick={(e) => fetchSignUpOrLoginPage(e, '/login')}>
-                        Login
-                    </li>
+                    {!loggedIn ? (
+                        <li
+                            onClick={(e) => fetchSignUpOrLoginPage(e, '/login')}
+                        >
+                            Login
+                        </li>
+                    ) : (
+                        ''
+                    )}
 
                     <li>
                         <Link to='/about'>About</Link>

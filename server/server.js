@@ -298,6 +298,117 @@ app.get('/user/login', (req, res) => {
     res.status(200).send(Boolean(req.session.userId));
 });
 
+app.post('/users/', (req, res) => {
+    let { firstName, lastName, race, feet, inches, sex, bio } = req.body;
+    const heightInInches = +feet * 12 + +inches;
+    const userid = req.session.userId;
+
+    let userMessages = { success: [], error: [] };
+
+    if (
+        firstName === '' ||
+        lastName === '' ||
+        race === '' ||
+        feet === '' ||
+        inches === '' ||
+        sex === '' ||
+        bio === ''
+    ) {
+        userMessages.error.push('Please Fill In All Fields');
+        res.send(userMessages);
+        return;
+    }
+
+    pool.query(
+        `UPDATE users
+        SET firstName = $1,
+        lastName = $2,
+        race = $3,
+        inches = $4,
+        sex = $5,
+        bio = $6
+        WHERE user_id = $7`,
+        [firstName, lastName, race, heightInInches, sex, bio, userid],
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            userMessages.success.push('Your information has been saved');
+            console.log('XXXXXXXXXXXXXxx');
+            res.send(userMessages);
+        }
+    );
+});
+
+app.post('/search/user', (req, res) => {
+    const {
+        encounteredTime,
+        encounteredDate,
+        encounteredStreet,
+        encounteredCity,
+        encounteredState,
+        encounteredZipCode,
+        encounteredPersonsRace,
+        encounteredPersonsSex,
+        encounteredPersonsHeightFt,
+        encounteredPersonsHeightIn,
+    } = req.body;
+    const encounteredPersonsHeightInInches =
+        +encounteredPersonsHeightFt * 12 + +encounteredPersonsHeightIn;
+    let userMessages = { success: [], error: [] };
+    const userid = req.session.userId;
+
+    if (
+        encounteredTime === '' ||
+        encounteredDate === '' ||
+        encounteredStreet === '' ||
+        encounteredCity === '' ||
+        encounteredState === '' ||
+        encounteredZipCode === '' ||
+        encounteredPersonsRace === '' ||
+        encounteredPersonsSex === '' ||
+        encounteredPersonsHeightFt === '' ||
+        encounteredPersonsHeightIn === ''
+    ) {
+        userMessages.error.push('Please Fill In All Fields');
+        res.send(userMessages);
+        return;
+    }
+
+    // 1. must use user address to get coordinates to store in database, instead of address
+    //ie longitude and latitude
+
+    pool.query(
+        `INSERT INTO searches (
+            encountered_time,
+            encountered_date,
+            encountered_persons_race,
+            encountered_persons_sex,
+            encountered_persons_height,
+            user_id
+            )
+        VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+            encounteredTime,
+            encounteredDate,
+            encounteredPersonsRace,
+            encounteredPersonsSex,
+            encounteredPersonsHeightInInches,
+            userid,
+        ],
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            userMessages.success.push(
+                'Your search has been succesfully submitted'
+            );
+
+            res.send(userMessages);
+        }
+    );
+});
+
 app.listen(PORT, () => {
     console.log('server started on port 5000');
 });

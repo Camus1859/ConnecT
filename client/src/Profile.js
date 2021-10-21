@@ -76,6 +76,7 @@ const Profile = () => {
 
             {/* <div>{location.state?.user ? <Logout /> : ''}</div> */}
             <p>Welcome {location.state?.user} !</p>
+            <button>Edit</button>
             <form onSubmit={formSubmitHandler}>
                 <label>
                     First Name:

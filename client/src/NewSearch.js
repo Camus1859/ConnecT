@@ -8,12 +8,14 @@ import Map from './Map';
 const NewSearch = () => {
     const location = useLocation();
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
+    const [lng, setLng] = useState(-70.9);
+    const [lat, setLat] = useState(42.35);
 
     const [userData, setUserData] = useState({
         encounteredTime: '',
         encounteredDate: '',
-        latitude: '',
-        longitude: '',
+        encounteredLatitude: '',
+        encounteredLongitude: '',
         encounteredPersonsRace: '',
         encounteredPersonsSex: '',
         encounteredPersonsHeightFt: '',
@@ -27,8 +29,8 @@ const NewSearch = () => {
         setUserData({
             encounteredTime: '',
             encounteredDate: '',
-            latitude: '',
-            longitude: '',
+            encounteredLatitude: '',
+            encounteredLongitude: '',
             encounteredPersonsRace: '',
             encounteredPersonsSex: '',
             encounteredPersonsHeightFt: '',
@@ -80,7 +82,7 @@ const NewSearch = () => {
     return (
         <>
             <UserMessages showUserMsgs={showUserMsgs} />
-            <Map/>
+            <Map lng={lng} setLng={setLng} lat={lat} setLat={setLat} />
 
             <h1>New Search</h1>
             <form onSubmit={formSubmitHandler}>
@@ -126,33 +128,31 @@ const NewSearch = () => {
 
                 <label htmlFor='longitude'>Longitude</label>
                 <input
-                    type='number'
-                    value={userData.longitude}
+                    type='text'
+                    value={(userData.encounteredLongitude = lng)}
                     name='longitude'
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            longitude: e.target.value,
+                            encounteredLongitude: e.target.value,
                         })
                     }
                     placeholder='Longitude'
                 />
 
-
                 <label htmlFor='latitude'>Latitude</label>
                 <input
-                    type='number'
-                    value={userData.latitude}
+                    type='text'
+                    value={(userData.encounteredLatitude = lat)}
                     name='latitude'
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            latitude: e.target.value,
+                            encounteredLatitude: e.target.value,
                         })
                     }
                     placeholder='Latitude'
                 />
-
 
                 <label htmlFor='race'> Race:</label>
 

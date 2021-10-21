@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import './index.css';
+import Map from './Map';
 
 const NewSearch = () => {
     const location = useLocation();
@@ -77,6 +80,7 @@ const NewSearch = () => {
     return (
         <>
             <UserMessages showUserMsgs={showUserMsgs} />
+            <Map/>
 
             <h1>New Search</h1>
             <form onSubmit={formSubmitHandler}>

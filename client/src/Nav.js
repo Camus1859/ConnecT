@@ -3,7 +3,6 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
 import Logout from './Logout';
 
-
 function Nav() {
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
     const history = useHistory();
@@ -76,7 +75,7 @@ function Nav() {
         }
     };
 
-    const fetchSearchPageOrProfilePageOrMessages = async (
+    const fetchSearchPageOrProfilePageOrMessagesOrMySearches = async (
         e,
         searchOrUserProfilePath
     ) => {
@@ -154,7 +153,7 @@ function Nav() {
                     {loggedIn ? (
                         <li
                             onClick={(e) =>
-                                fetchSearchPageOrProfilePageOrMessages(
+                                fetchSearchPageOrProfilePageOrMessagesOrMySearches(
                                     e,
                                     '/search'
                                 )
@@ -170,7 +169,7 @@ function Nav() {
                     {loggedIn ? (
                         <li
                             onClick={(e) =>
-                                fetchSearchPageOrProfilePageOrMessages(
+                                fetchSearchPageOrProfilePageOrMessagesOrMySearches(
                                     e,
                                     '/user/profile'
                                 )
@@ -186,7 +185,7 @@ function Nav() {
                     {loggedIn ? (
                         <li
                             onClick={(e) =>
-                                fetchSearchPageOrProfilePageOrMessages(
+                                fetchSearchPageOrProfilePageOrMessagesOrMySearches(
                                     e,
                                     '/messages'
                                 )
@@ -194,6 +193,22 @@ function Nav() {
                         >
                             {' '}
                             Messages{' '}
+                        </li>
+                    ) : (
+                        ''
+                    )}
+
+                    {loggedIn ? (
+                        <li
+                            onClick={(e) =>
+                                fetchSearchPageOrProfilePageOrMessagesOrMySearches(
+                                    e,
+                                    '/mySearches'
+                                )
+                            }
+                        >
+                            {' '}
+                            Searches{' '}
                         </li>
                     ) : (
                         ''

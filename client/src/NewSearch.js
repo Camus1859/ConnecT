@@ -9,14 +9,13 @@ const NewSearch = () => {
     const [userData, setUserData] = useState({
         encounteredTime: '',
         encounteredDate: '',
-        encounteredStreet: '',
-        encounteredCity: '',
-        encounteredState: '',
-        encounteredZipCode: '',
+        latitude: '',
+        longitude: '',
         encounteredPersonsRace: '',
         encounteredPersonsSex: '',
         encounteredPersonsHeightFt: '',
         encounteredPersonsHeightIn: '',
+        searchTitle: '',
     });
 
     const formSubmitHandler = async (e) => {
@@ -25,14 +24,13 @@ const NewSearch = () => {
         setUserData({
             encounteredTime: '',
             encounteredDate: '',
-            encounteredStreet: '',
-            encounteredCity: '',
-            encounteredState: '',
-            encounteredZipCode: '',
+            latitude: '',
+            longitude: '',
             encounteredPersonsRace: '',
             encounteredPersonsSex: '',
             encounteredPersonsHeightFt: '',
             encounteredPersonsHeightIn: '',
+            searchTitle: '',
         });
 
         console.log(userData);
@@ -82,6 +80,20 @@ const NewSearch = () => {
 
             <h1>New Search</h1>
             <form onSubmit={formSubmitHandler}>
+                <label htmlFor='search title'>Name of Search</label>
+                <input
+                    type='text'
+                    value={userData.searchTitle}
+                    name='search title'
+                    onChange={(e) =>
+                        setUserData({
+                            ...userData,
+                            searchTitle: e.target.value,
+                        })
+                    }
+                    placeholder='Give Your Seach A Name'
+                />
+
                 <label htmlFor='time'></label>
                 <input
                     type='time'
@@ -108,61 +120,35 @@ const NewSearch = () => {
                     }
                 />
 
-                <label htmlFor='street'>Street #</label>
+                <label htmlFor='longitude'>Longitude</label>
                 <input
                     type='number'
-                    value={userData.encounteredStreet}
-                    name='street'
+                    value={userData.longitude}
+                    name='longitude'
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            encounteredStreet: e.target.value,
+                            longitude: e.target.value,
                         })
                     }
-                    placeholder='Enter Your Street Number'
+                    placeholder='Longitude'
                 />
 
-                <label htmlFor='City'>City</label>
-                <input
-                    type='text'
-                    value={userData.encounteredCity}
-                    name='city'
-                    onChange={(e) =>
-                        setUserData({
-                            ...userData,
-                            encounteredCity: e.target.value,
-                        })
-                    }
-                    placeholder='Enter Your City'
-                />
 
-                <label htmlFor='state'>State</label>
-                <input
-                    type='text'
-                    value={userData.encounteredState}
-                    name='state'
-                    onChange={(e) =>
-                        setUserData({
-                            ...userData,
-                            encounteredState: e.target.value,
-                        })
-                    }
-                    placeholder='Enter Your State'
-                />
-
-                <label htmlFor='zipcode'>Zip Code</label>
+                <label htmlFor='latitude'>Latitude</label>
                 <input
                     type='number'
-                    value={userData.encounteredZipCode}
-                    name='zipcode'
+                    value={userData.latitude}
+                    name='latitude'
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            encounteredZipCode: e.target.value,
+                            latitude: e.target.value,
                         })
                     }
-                    placeholder='Enter Your Zip Code'
+                    placeholder='Latitude'
                 />
+
 
                 <label htmlFor='race'> Race:</label>
 

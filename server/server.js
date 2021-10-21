@@ -344,14 +344,16 @@ app.post('/search/user', (req, res) => {
     const {
         encounteredTime,
         encounteredDate,
-        encounteredStreet,
-        encounteredCity,
-        encounteredState,
-        encounteredZipCode,
+        encounteredAddress,
+        // encounteredStreet,
+        // encounteredCity,
+        // encounteredState,
+        // encounteredZipCode,
         encounteredPersonsRace,
         encounteredPersonsSex,
         encounteredPersonsHeightFt,
         encounteredPersonsHeightIn,
+        searchTitle,
     } = req.body;
     const encounteredPersonsHeightInInches =
         +encounteredPersonsHeightFt * 12 + +encounteredPersonsHeightIn;
@@ -361,19 +363,25 @@ app.post('/search/user', (req, res) => {
     if (
         encounteredTime === '' ||
         encounteredDate === '' ||
-        encounteredStreet === '' ||
-        encounteredCity === '' ||
-        encounteredState === '' ||
-        encounteredZipCode === '' ||
+        encounteredAddress === '' ||
+        // encounteredStreet === '' ||
+        // encounteredCity === '' ||
+        // encounteredState === '' ||
+        // encounteredZipCode === '' ||
         encounteredPersonsRace === '' ||
         encounteredPersonsSex === '' ||
         encounteredPersonsHeightFt === '' ||
-        encounteredPersonsHeightIn === ''
+        encounteredPersonsHeightIn === '' ||
+        searchTitle === ''
     ) {
         userMessages.error.push('Please Fill In All Fields');
         res.send(userMessages);
         return;
     }
+
+    console.log(encounteredAddress)
+
+
 
     // 1. must use user address to get coordinates to store in database, instead of address
     //ie longitude and latitude
@@ -385,9 +393,10 @@ app.post('/search/user', (req, res) => {
             encountered_persons_race,
             encountered_persons_sex,
             encountered_persons_height,
-            user_id
+            user_id,
+            search_title
             )
-        VALUES ($1, $2, $3, $4, $5, $6)`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [
             encounteredTime,
             encounteredDate,
@@ -395,6 +404,7 @@ app.post('/search/user', (req, res) => {
             encounteredPersonsSex,
             encounteredPersonsHeightInInches,
             userid,
+            searchTitle,
         ],
         (err, results) => {
             if (err) {

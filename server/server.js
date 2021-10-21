@@ -341,14 +341,11 @@ app.post('/users/', (req, res) => {
 });
 
 app.post('/search/user', (req, res) => {
-    const {
+    let {
         encounteredTime,
         encounteredDate,
-        encounteredAddress,
-        // encounteredStreet,
-        // encounteredCity,
-        // encounteredState,
-        // encounteredZipCode,
+        encounteredLatitude,
+        encounteredLongitude,
         encounteredPersonsRace,
         encounteredPersonsSex,
         encounteredPersonsHeightFt,
@@ -357,49 +354,60 @@ app.post('/search/user', (req, res) => {
     } = req.body;
     const encounteredPersonsHeightInInches =
         +encounteredPersonsHeightFt * 12 + +encounteredPersonsHeightIn;
+    // encounteredLatitude = +encounteredLatitude;
+    // encounteredLongitude = +encounteredLongitude;
+
+    console.log({encounteredLatitude, encounteredLongitude})
     let userMessages = { success: [], error: [] };
     const userid = req.session.userId;
 
     if (
-        encounteredTime === '' ||
-        encounteredDate === '' ||
-        encounteredAddress === '' ||
-        // encounteredStreet === '' ||
-        // encounteredCity === '' ||
-        // encounteredState === '' ||
-        // encounteredZipCode === '' ||
+        (encounteredTime === '' ||
+            encounteredDate === '' ||
+            encounteredLatitude === '',
+        encounteredLongitude === '',
         encounteredPersonsRace === '' ||
-        encounteredPersonsSex === '' ||
-        encounteredPersonsHeightFt === '' ||
-        encounteredPersonsHeightIn === '' ||
-        searchTitle === ''
+            encounteredPersonsSex === '' ||
+            encounteredPersonsHeightFt === '' ||
+            encounteredPersonsHeightIn === '' ||
+            searchTitle === '')
     ) {
+        console.log('space in answer!!!!!!!!!!!!!!!1');
         userMessages.error.push('Please Fill In All Fields');
         res.send(userMessages);
         return;
     }
 
-    console.log(encounteredAddress)
-
-
-
-    // 1. must use user address to get coordinates to store in database, instead of address
-    //ie longitude and latitude
+    console.log({
+        encounteredTime,
+        encounteredDate,
+        encounteredLatitude,
+        encounteredLongitude,
+        encounteredPersonsRace,
+        encounteredPersonsSex,
+        encounteredPersonsHeightFt,
+        encounteredPersonsHeightIn,
+        searchTitle,
+    });
 
     pool.query(
         `INSERT INTO searches (
             encountered_time,
             encountered_date,
+            encountered_latitude,
+            encountered_longitude,
             encountered_persons_race,
             encountered_persons_sex,
             encountered_persons_height,
             user_id,
             search_title
             )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
         [
             encounteredTime,
             encounteredDate,
+            encounteredLatitude,
+            encounteredLongitude,
             encounteredPersonsRace,
             encounteredPersonsSex,
             encounteredPersonsHeightInInches,

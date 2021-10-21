@@ -409,6 +409,32 @@ app.post('/search/user', (req, res) => {
     );
 });
 
+app.get('/mySearches', (req, res) => {
+    const userid = req.session.userId;
+    // get all searches for current user and send search name to front end
+    pool.query(
+        `SELECT search_title FROM searches
+        WHERE user_id = $1
+        `,
+        [userid],
+        (err, results) => {
+            if (err) {
+                throw err;
+            }
+            console.log(results.rows);
+            const arrayOfSearchObj = results.rows;
+
+            const searchTitles = arrayOfSearchObj.map(
+                (searches) => searches.search_title
+            );
+
+            console.log(searchTitles);
+
+            res.status(200).send({ user: searchTitles, error: [] });
+        }
+    );
+});
+
 app.listen(PORT, () => {
     console.log('server started on port 5000');
 });

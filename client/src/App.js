@@ -7,11 +7,15 @@ import About from './About';
 import NewSearch from './NewSearch';
 import Profile from './Profile';
 import Messages from './Messages';
-
+import Welcome from './Welcome';
+import MySearches from './MySearches.js';
 
 function App() {
     return (
         <Router forceRefresh={true}>
+            <Route exact path='/'>
+                <Welcome />
+            </Route>
             <Nav />
             <Switch>
                 <Route exact path='/signup'>
@@ -51,6 +55,10 @@ function App() {
 
                 <Route exact path='/messages'>
                     <Messages />
+                </Route>
+
+                <Route exact path='/mySearches'>
+                    <MySearches />
                 </Route>
             </Switch>
         </Router>

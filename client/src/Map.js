@@ -6,11 +6,9 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 mapboxgl.accessToken =
     'pk.eyJ1Ijoic2Nob3BlbmhhdXIiLCJhIjoiY2t1enN1MGhqN2ZhaTJucWpiYTd5aWNlbCJ9.iO_pudJDsq2K6beViTwEXg';
 
-export default function Map() {
+export default function Map({lng, setLng, lat, setLat}) {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
     const [zoom, setZoom] = useState(9);
 
     useEffect(() => {
@@ -46,7 +44,7 @@ export default function Map() {
     return (
         <div>
             <div className='sidebar'>
-                Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+               Latitude: {lat} |  Longitude: {lng} |  Zoom: {zoom}
             </div>
             <div ref={mapContainer} className='map-container' />
         </div>

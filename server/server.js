@@ -299,15 +299,15 @@ app.get('/user/login', (req, res) => {
 });
 
 app.post('/users/', (req, res) => {
-    let { firstName, lastName, race, feet, inches, sex, bio } = req.body;
+    let { firstname, lastname, race, feet, inches, sex, bio } = req.body;
     const heightInInches = +feet * 12 + +inches;
     const userid = req.session.userId;
 
     let userMessages = { success: [], error: [] };
 
     if (
-        firstName === '' ||
-        lastName === '' ||
+        firstname === '' ||
+        lastname === '' ||
         race === '' ||
         feet === '' ||
         inches === '' ||
@@ -321,14 +321,26 @@ app.post('/users/', (req, res) => {
 
     pool.query(
         `UPDATE users
-        SET firstName = $1,
-        lastName = $2,
+        SET firstname = $1,
+        lastname = $2,
         race = $3,
         inches = $4,
         sex = $5,
-        bio = $6
+        bio = $6,
+        encountered_persons_height_Ft,
+        encountered_persons_height_In,
         WHERE user_id = $7`,
-        [firstName, lastName, race, heightInInches, sex, bio, userid],
+        [
+            firstname,
+            lastname,
+            race,
+            heightInInches,
+            sex,
+            bio,
+            feet,
+            inches,
+            userid,
+        ],
         (err, results) => {
             if (err) {
                 throw err;
@@ -354,10 +366,8 @@ app.post('/search/user', (req, res) => {
     } = req.body;
     const encounteredPersonsHeightInInches =
         +encounteredPersonsHeightFt * 12 + +encounteredPersonsHeightIn;
-    // encounteredLatitude = +encounteredLatitude;
-    // encounteredLongitude = +encounteredLongitude;
 
-    console.log({encounteredLatitude, encounteredLongitude})
+    console.log({ encounteredLatitude, encounteredLongitude });
     let userMessages = { success: [], error: [] };
     const userid = req.session.userId;
 
@@ -370,25 +380,14 @@ app.post('/search/user', (req, res) => {
             encounteredPersonsSex === '' ||
             encounteredPersonsHeightFt === '' ||
             encounteredPersonsHeightIn === '' ||
-            searchTitle === '')
+            searchTitle === '' ||
+            encounteredPersonsHeightFt === '' ||
+            encounteredPersonsHeightIn === '')
     ) {
-        console.log('space in answer!!!!!!!!!!!!!!!1');
         userMessages.error.push('Please Fill In All Fields');
         res.send(userMessages);
         return;
     }
-
-    console.log({
-        encounteredTime,
-        encounteredDate,
-        encounteredLatitude,
-        encounteredLongitude,
-        encounteredPersonsRace,
-        encounteredPersonsSex,
-        encounteredPersonsHeightFt,
-        encounteredPersonsHeightIn,
-        searchTitle,
-    });
 
     pool.query(
         `INSERT INTO searches (
@@ -400,9 +399,11 @@ app.post('/search/user', (req, res) => {
             encountered_persons_sex,
             encountered_persons_height,
             user_id,
-            search_title
+            search_title,
+            encountered_persons_height_Ft,
+        encountered_persons_height_In,
             )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
         [
             encounteredTime,
             encounteredDate,
@@ -413,6 +414,8 @@ app.post('/search/user', (req, res) => {
             encounteredPersonsHeightInInches,
             userid,
             searchTitle,
+            encounteredPersonsHeightFt,
+            encounteredPersonsHeightIn,
         ],
         (err, results) => {
             if (err) {
@@ -449,6 +452,91 @@ app.get('/mySearches', (req, res) => {
             console.log(searchTitles);
 
             res.status(200).send({ user: searchTitles, error: [] });
+        }
+    );
+});
+
+app.get('/usersInfo', (req, res) => {
+    console.log('aaaaaaaaaaaaaaa');
+    const userid = req.session.userId;
+
+    pool.query(
+        `SELECT firstname, lastname, bio, sex, race, inches, encountered_persons_height_in, encountered_persons_height_ft FROM users
+        WHERE user_id = $1
+        `,
+        [userid],
+        (err, results) => {
+            if (err) {
+                //send error to the front end??????
+                throw err;
+            }
+            const arrWithUserInfoAsObj = results.rows[0];
+            console.log(arrWithUserInfoAsObj);
+            // const usersInfo = Object.values(arrWithUserInfoAsObj);
+
+            res.status(200).send({ user: arrWithUserInfoAsObj, error: [] });
+        }
+    );
+});
+
+app.put('/search/user', (req, res) => {
+    const {
+        firstname,
+        lastname,
+        bio,
+        sex,
+        race,
+        inches,
+        encountered_persons_height_ft,
+        encountered_persons_height_in,
+    } = req.body;
+    let userMessages = { success: [], error: [] };
+    const userid = req.session.userId;
+
+    if (
+        firstname === '' ||
+        lastname === '' ||
+        bio === '' ||
+        sex === '' ||
+        race === '' ||
+        inches === '' ||
+        encountered_persons_height_ft === '' ||
+        encountered_persons_height_in === ''
+    ) {
+        console.log('something is blank')
+        userMessages.error.push('Please Fill In All Fields');
+        res.send(userMessages);
+        return;
+    }
+    console.log('should not run')
+    pool.query(
+        `UPDATE users set firstname = $1, lastname = $2,
+     bio = $3, sex = $4, race = $5, inches = $6,
+     encountered_persons_height_ft = $7,
+     encountered_persons_height_in = $8
+     WHERE user_id = $9
+    `,
+        [
+            firstname,
+            lastname,
+            bio,
+            sex,
+            race,
+            inches,
+            encountered_persons_height_ft,
+            encountered_persons_height_in,
+            userid,
+        ],
+        (err, results) => {
+            if (err) {
+                //send error to the front end??????
+                throw err;
+            }
+            userMessages.success.push(
+                'Your profile has been successfully updated'
+            );
+
+            res.send(userMessages);
         }
     );
 });

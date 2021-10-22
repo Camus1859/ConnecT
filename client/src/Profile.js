@@ -1,34 +1,63 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
+import UserInfoEdit from './UserInfoEdit';
 
 // import Logout from './Logout';
 
 const Profile = () => {
     const location = useLocation();
     const [userData, setUserData] = useState({
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         race: '',
         feet: '',
         inches: '',
         sex: '',
         bio: '',
-        image: '',
     });
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
+    const [showUserInfo, setShowUserInfo] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+
+    const getUserInfo = async (e) => {
+        try {
+            const response = await fetch('/usersInfo', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    credentials: 'include',
+                },
+            });
+
+            if (response.ok) {
+                const clientResponse = await response.json();
+
+                setShowUserInfo(true);
+                setUserInfo(clientResponse.user);
+                console.log(clientResponse.user);
+                return;
+            } else {
+                //some front end error response is not a 200
+                const clientResponse = await response.json();
+                //  SetShowUserMsgs(clientResponse.error);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
 
     const formSubmitHandler = async (e) => {
         e.preventDefault();
         setUserData({
-            firstName: '',
-            lastName: '',
+            firstname: '',
+            lastname: '',
             race: '',
             feet: '',
             inches: '',
             sex: '',
             bio: '',
-            image: '',
         });
 
         try {
@@ -62,7 +91,7 @@ const Profile = () => {
             } else {
                 //some front end error response is not a 200
                 const clientResponse = await response.json();
-                //  SetShowUserMsgs(clientResponse.error);
+                SetShowUserMsgs(clientResponse.error);
             }
         } catch (e) {
             //show User Error(e) network error
@@ -76,18 +105,18 @@ const Profile = () => {
 
             {/* <div>{location.state?.user ? <Logout /> : ''}</div> */}
             <p>Welcome {location.state?.user} !</p>
-            <button>Edit</button>
+            <button onClick={(e) => getUserInfo('/userInfo')}>Edit</button>
             <form onSubmit={formSubmitHandler}>
                 <label>
                     First Name:
                     <input
                         type='text'
                         name='first name'
-                        value={userData.firstName}
+                        value={userData.firstname}
                         onChange={(e) =>
                             setUserData({
                                 ...userData,
-                                firstName: e.target.value,
+                                firstname: e.target.value,
                             })
                         }
                         placeholder='Enter Your First Name'
@@ -99,11 +128,11 @@ const Profile = () => {
                     <input
                         type='text'
                         name='last name'
-                        value={userData.lastName}
+                        value={userData.lastname}
                         onChange={(e) =>
                             setUserData({
                                 ...userData,
-                                lastName: e.target.value,
+                                lastname: e.target.value,
                             })
                         }
                         placeholder='Enter Your Last Name'
@@ -234,6 +263,11 @@ const Profile = () => {
                 ></textarea>
                 <button type='submit'>Submit</button>
             </form>
+            {showUserInfo && userInfo.firstname ? (
+                <UserInfoEdit {...userInfo} />
+            ) : (
+                ''
+            )}
         </>
     );
 };

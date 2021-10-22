@@ -26,6 +26,8 @@ CREATE TABLE searches (
     encountered_persons_race varchar(255),
     encountered_persons_sex varchar(255),
     encountered_persons_height INT,
+    encountered_persons_height_Ft varchar(255),
+    encountered_persons_height_In varchar(255),
     match_found boolean,
     match_accepted boolean,
 

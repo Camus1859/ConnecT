@@ -10,8 +10,9 @@ CREATE TABLE users (
     bio varchar(1000),
     sex varchar,
     race varchar,
-    inches INT
-
+    inches INT,
+    my_height_ft varchar(10),
+    my_height_in  varchar(10)
 );
 
 

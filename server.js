@@ -6,6 +6,8 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const path = require('path');
+
 
 const initializePassport = require('./passportConfig');
 
@@ -37,6 +39,13 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
+
 
 // const TWO_HOURS = 1000 * 60 * 60 * 2;
 

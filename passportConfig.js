@@ -9,7 +9,6 @@ const initializePassport = (passport) => {
             [username],
             (err, results) => {
                 if (err) {
-                    console.log('AAAAAAAAAAAAAAAAAAA')
                     throw err;
                 }
 
@@ -18,7 +17,6 @@ const initializePassport = (passport) => {
 
                     bcrypt.compare(password, user.password, (err, isMatch) => {
                         if (err) {
-                            console.log('BBBBBBBBBBBBBBBBBBBb')
 
 
                             throw err;
@@ -60,23 +58,16 @@ const initializePassport = (passport) => {
         return done(null, user.user_id);
     });
 
-
     passport.deserializeUser((id, done) => {
-        console.log('YYYYYYYYYYYYYYYyy')
-        console.log(id)
-
 
         pool.query(
             `SELECT * FROM users WHERE user_id= $1 `,
             [id],
             (err, results) => {
-                console.log('ZZZZZZZZZZZZZZZZZz')
 
                 if (err) {
                     throw err;
                 }
-
-                console.log('AAAAAAAAAAAAAAa')
 
 
                 return done(null, results.rows[0]);

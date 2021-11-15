@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:5000",
+  "homepage": "https://laventure-connect-app.herokuapp.com/",
+
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
     "@testing-library/jest-dom": "^5.11.4",

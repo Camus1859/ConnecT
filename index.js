@@ -50,6 +50,10 @@ app.use(passport.session());
 //     res.sendFile(path.join(__dirname + '/client/build/index.html'));
 //   });
 
+app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+  });
+
 app.use(express.static("client/build/"));
 
 

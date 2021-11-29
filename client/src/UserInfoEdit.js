@@ -8,8 +8,8 @@ const UserInfoEdit = ({
     sex,
     race,
     inches,
-    encountered_persons_height_ft,
-    encountered_persons_height_in,
+    my_height_ft,
+    my_height_in,
 }) => {
     let [userData, setUserData] = useState({
         firstname,
@@ -18,8 +18,8 @@ const UserInfoEdit = ({
         sex,
         race,
         inches,
-        encountered_persons_height_ft,
-        encountered_persons_height_in,
+        my_height_ft,
+        my_height_in,
     });
     const [showUserMsgs, SetShowUserMsgs] = useState([]);
 
@@ -33,8 +33,8 @@ const UserInfoEdit = ({
             sex: '',
             race: '',
             inches: '',
-            encountered_persons_height_ft: '',
-            encountered_persons_height_in: '',
+            my_height_ft: '',
+            my_height_in: '',
         });
 
         console.log(userData);
@@ -151,11 +151,11 @@ const UserInfoEdit = ({
                 <select
                     type='number'
                     name='feet'
-                    value={userData.encountered_persons_height_ft}
+                    value={userData.my_height_ft}
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            encountered_persons_height_ft: e.target.value,
+                            my_height_ft: e.target.value,
                         })
                     }
                     placeholder='ft'
@@ -177,11 +177,11 @@ const UserInfoEdit = ({
                 <select
                     type='number'
                     name='inches'
-                    value={userData.encountered_persons_height_in}
+                    value={userData.my_height_in}
                     onChange={(e) =>
                         setUserData({
                             ...userData,
-                            encountered_persons_height_in: e.target.value,
+                            my_height_in: e.target.value,
                         })
                     }
                     placeholder='in'

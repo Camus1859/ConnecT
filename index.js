@@ -480,7 +480,7 @@ app.get('/usersInfo', (req, res) => {
     const userid = req.session.userId;
 
     pool.query(
-        `SELECT firstname, lastname, bio, sex, race, inches, my_height_ft, my_height_ft FROM users
+        `SELECT firstname, lastname, bio, sex, race, inches, my_height_ft, my_height_in FROM users
         WHERE user_id = $1
         `,
         [userid],

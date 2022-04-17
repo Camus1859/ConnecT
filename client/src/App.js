@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import Nav from './Nav';
+import Nav from './components/Nav';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import SignupLogin from './Signup_Login';
-import About from './About';
-import NewSearch from './NewSearch';
-import Profile from './Profile';
-import Messages from './Messages';
-import Welcome from './Welcome';
-import MySearches from './MySearches.js';
+import SignupLogin from './components/Signup_Login';
+import About from './components/About';
+import NewSearch from './components/NewSearch';
+import Profile from './components/Profile';
+import Messages from './components/Messages';
+import Welcome from './components/Welcome';
+import MySearches from './components/MySearches.js';
 
 function App() {
     return (

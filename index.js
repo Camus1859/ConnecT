@@ -96,6 +96,14 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+
+
+
+
+
+
+
+
 app.get('/signup', (req, res) => {
     if (req.session.userId !== undefined) {
         const id = req.session.userId;
@@ -126,6 +134,16 @@ app.get('/signup', (req, res) => {
         return res.status(201).send({ isLoggedIn: false });
     }
 });
+
+
+
+
+
+
+
+
+
+
 
 app.get('/login', (req, res) => {
     if (req.session.userId !== undefined) {
@@ -158,6 +176,11 @@ app.get('/login', (req, res) => {
     }
 });
 
+
+
+
+
+
 const reDirectLogin = (req, res, next) => {
 
     if (req.session.userId === undefined) {
@@ -165,6 +188,13 @@ const reDirectLogin = (req, res, next) => {
     }
     next();
 };
+
+
+
+
+
+
+
 
 app.post('/user/logouts', reDirectLogin, (req, res) => {
     req.logOut();
@@ -177,13 +207,35 @@ app.post('/user/logouts', reDirectLogin, (req, res) => {
     res.status(200).send({ message: ['You are logged out'] });
 });
 
+
+
+
+
+
+
+
 app.get('/search', reDirectLogin, (req, res) => {
     res.status(200).send({ user: [req.user.user_name], error: [] });
 });
 
+
+
+
+
+
+
+
 app.get('/messages', reDirectLogin, (req, res) => {
     res.status(200).send({ user: [req.user.user_name], error: [] });
 });
+
+
+
+
+
+
+
+
 
 app.get('/user/profile', reDirectLogin, (req, res) => {
     const id = req.session.userId;
@@ -209,6 +261,13 @@ app.get('/user/profile', reDirectLogin, (req, res) => {
         }
     );
 });
+
+
+
+
+
+
+
 
 app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
@@ -238,9 +297,27 @@ app.post('/login', function (req, res, next) {
     })(req, res, next);
 });
 
+
+
+
+
+
+
+
+
+
+
 app.get('/user/login', (req, res) => {
     res.status(200).send(Boolean(req.session.userId));
 });
+
+
+
+
+
+
+
+
 
 app.post('/users/', (req, res) => {
     let { firstname, lastname, race, feet, inches, sex, bio } = req.body;
@@ -294,6 +371,13 @@ app.post('/users/', (req, res) => {
         }
     );
 });
+
+
+
+
+
+
+
 
 app.post('/search/user', (req, res) => {
     let {
@@ -372,6 +456,16 @@ app.post('/search/user', (req, res) => {
     );
 });
 
+
+
+
+
+
+
+
+
+
+
 app.get('/mySearches', (req, res) => {
     const userid = req.session.userId;
     // get all searches for current user and send search name to front end
@@ -395,6 +489,13 @@ app.get('/mySearches', (req, res) => {
     );
 });
 
+
+
+
+
+
+
+
 app.get('/usersInfo', (req, res) => {
     const userid = req.session.userId;
 
@@ -414,6 +515,13 @@ app.get('/usersInfo', (req, res) => {
         }
     );
 });
+
+
+
+
+
+
+
 
 app.put('/search/user', (req, res) => {
     const {
@@ -474,6 +582,13 @@ app.put('/search/user', (req, res) => {
         }
     );
 });
+
+
+
+
+
+
+
 
 
 

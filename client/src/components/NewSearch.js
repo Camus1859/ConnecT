@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import UserMessages from './UserMessages';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './index.css';
+import "../styles/index.css"
 import Map from './Map';
 
 const NewSearch = () => {

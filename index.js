@@ -8,11 +8,6 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const path = require('path');
 
-
-
-
-
-
 const initializePassport = require('./passportConfig');
 
 initializePassport(passport);
@@ -29,14 +24,11 @@ app.use(
         saveUninitialized: false,
         store: new pgSession({ pool }),
         cookie: {
-            //  secure: true,
             maxAge: twoHours,
             sameSite: true,
         },
     })
 );
-
-// app.use(cors())
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
@@ -45,42 +37,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-
-
-// const TWO_HOURS = 1000 * 60 * 60 * 2;
-
-// const {
-//     PORT = 5000,
-//     NODE_ENV = 'development',
-
-//     SESS_SECRET = 'FLJALJDLAKJFDLJALDFJLJMLJ',
-//     SESS_NAME = 'sid',
-//     SESS_LIFETIME = TWO_HOURS,
-// } = process.env;
-
-// const IN_PROD = NODE_ENV === 'production';
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// app.use(
-//     session({
-//         name: SESS_NAME,
-//         resave: false,
-//         saveUninitialized: false,
-//         secret: SESS_SECRET,
-//         store: new pgSession({
-//             pool: pool,
-//         }),
-
-//         cookie: {
-//             maxAge: SESS_LIFETIME,
-//             sameSite: true,
-//             secure: IN_PROD,
-//         },
-//     })
-// );
 
 app.post('/signup', async (req, res) => {
     let { username, password, password2 } = req.body;
@@ -143,7 +99,6 @@ app.post('/signup', async (req, res) => {
 app.get('/signup', (req, res) => {
     if (req.session.userId !== undefined) {
         const id = req.session.userId;
-        console.log(req.session.userId);
         let user;
 
         pool.query(
@@ -159,9 +114,6 @@ app.get('/signup', (req, res) => {
                     //  user not found send to front end
                 }
 
-                console.log('UserFOunddddddddddddddddddddddddddd');
-
-                console.log(results.rows[0].user_name);
                 return res.status(201).send({
                     user_name: results.rows[0].user_name,
                     error: [],
@@ -178,7 +130,6 @@ app.get('/signup', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.userId !== undefined) {
         const id = req.session.userId;
-        console.log(req.session.userId);
         let user;
 
         pool.query(
@@ -194,9 +145,6 @@ app.get('/login', (req, res) => {
                     //  user not found send to front end
                 }
 
-                console.log('UserFOunddddddddddddddddddddddddddd');
-
-                console.log(results.rows[0].user_name);
                 return res.status(201).send({
                     user_name: results.rows[0].user_name,
                     error: [],
@@ -211,13 +159,10 @@ app.get('/login', (req, res) => {
 });
 
 const reDirectLogin = (req, res, next) => {
-    console.log('redirect ran');
-    console.log(req.session);
 
     if (req.session.userId === undefined) {
         return res.status(201).send({ error: ['Please login'] });
     }
-    console.log('next ran');
     next();
 };
 
@@ -233,22 +178,15 @@ app.post('/user/logouts', reDirectLogin, (req, res) => {
 });
 
 app.get('/search', reDirectLogin, (req, res) => {
-    console.log(
-        'search ran, looking to get user somehow to send back to front end to show search '
-    );
     res.status(200).send({ user: [req.user.user_name], error: [] });
 });
 
 app.get('/messages', reDirectLogin, (req, res) => {
-    console.log(
-        'search ran, looking to get user somehow to send back to front end to show search '
-    );
     res.status(200).send({ user: [req.user.user_name], error: [] });
 });
 
 app.get('/user/profile', reDirectLogin, (req, res) => {
     const id = req.session.userId;
-    console.log(req.session.userId);
     let user;
 
     pool.query(
@@ -264,9 +202,7 @@ app.get('/user/profile', reDirectLogin, (req, res) => {
                 //  user not found send to front end
             }
 
-            console.log('UserFOunddddddddddddddddddddddddddd');
 
-            console.log(results.rows[0].user_name);
             return res
                 .status(201)
                 .send({ user: results.rows[0].user_name, error: [] });
@@ -277,7 +213,6 @@ app.get('/user/profile', reDirectLogin, (req, res) => {
 app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
         if (err) {
-            console.log('mmmmmmmmmmZZZZZZZZZz');
             return next(err); // will generate a 500 error
         }
         // Generate a JSON response reflecting authentication status
@@ -291,7 +226,6 @@ app.post('/login', function (req, res, next) {
         }
         req.login(user, function (err) {
             if (err) {
-                console.log('ppppppppYYYYYYYYYYYYYy');
 
                 return next(err);
             }
@@ -309,16 +243,10 @@ app.get('/user/login', (req, res) => {
 });
 
 app.post('/users/', (req, res) => {
-    console.log('ran!!!!!!!!!!!!!!!!!')
     let { firstname, lastname, race, feet, inches, sex, bio } = req.body;
 
     const heightInInches = +feet * 12 + +inches;
     const userid = req.session.userId;
-
-
-    console.log({firstname, lastname, race, feet, inches, sex, bio, heightInInches, userid })
-
-
     let userMessages = { success: [], error: [] };
 
     if (
@@ -334,8 +262,6 @@ app.post('/users/', (req, res) => {
         res.send(userMessages);
         return;
     }
-
-    console.log((typeof feet))
 
     pool.query(
         `UPDATE users
@@ -364,14 +290,12 @@ app.post('/users/', (req, res) => {
                 throw err;
             }
             userMessages.success.push('Your information has been saved');
-            console.log('XXXXXXXXXXXXXxx');
             res.send(userMessages);
         }
     );
 });
 
 app.post('/search/user', (req, res) => {
-    console.log('search ran!!!!!!!!!!!!!!!!!!!!!!')
     let {
         encounteredTime,
         encounteredDate,
@@ -386,7 +310,6 @@ app.post('/search/user', (req, res) => {
     const encounteredPersonsHeightInInches =
         +encounteredPersonsHeightFt * 12 + +encounteredPersonsHeightIn;
 
-    console.log({ encounteredLatitude, encounteredLongitude });
     let userMessages = { success: [], error: [] };
     const userid = req.session.userId;
 
@@ -461,14 +384,11 @@ app.get('/mySearches', (req, res) => {
             if (err) {
                 throw err;
             }
-            console.log(results.rows);
             const arrayOfSearchObj = results.rows;
 
             const searchTitles = arrayOfSearchObj.map(
                 (searches) => searches.search_title
             );
-
-            console.log(searchTitles);
 
             res.status(200).send({ user: searchTitles, error: [] });
         }
@@ -476,7 +396,6 @@ app.get('/mySearches', (req, res) => {
 });
 
 app.get('/usersInfo', (req, res) => {
-    console.log('aaaaaaaaaaaaaaa');
     const userid = req.session.userId;
 
     pool.query(
@@ -490,8 +409,6 @@ app.get('/usersInfo', (req, res) => {
                 throw err;
             }
             const arrWithUserInfoAsObj = results.rows[0];
-            console.log(arrWithUserInfoAsObj);
-            // const usersInfo = Object.values(arrWithUserInfoAsObj);
 
             res.status(200).send({ user: arrWithUserInfoAsObj, error: [] });
         }
@@ -522,12 +439,10 @@ app.put('/search/user', (req, res) => {
         encountered_persons_height_ft === '' ||
         encountered_persons_height_in === ''
     ) {
-        console.log('something is blank')
         userMessages.error.push('Please Fill In All Fields');
         res.send(userMessages);
         return;
     }
-    console.log('should not run')
     pool.query(
         `UPDATE users set firstname = $1, lastname = $2,
      bio = $3, sex = $4, race = $5, inches = $6,
@@ -560,12 +475,6 @@ app.put('/search/user', (req, res) => {
     );
 });
 
-
-// app.use(express.static(path.join(__dirname, '/client/build/')));
-
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '/client/build/index.html'));
-//   });
 
 
 const root = require('path').join(__dirname, 'client', 'build')

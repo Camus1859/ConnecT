@@ -1,0 +1,5 @@
+# Ignore all HTML files:
+*.json
+*.sql
+*.yml
+*.md

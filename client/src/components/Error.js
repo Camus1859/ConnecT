@@ -1,14 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Error() {
-    return (
-        <div>
-            <h1>Error</h1>
+  return (
+    <div>
+      <h1>Error</h1>
 
-            <Link to='/'> Back Home</Link>
-        </div>
-    );
+      <Link to="/"> Back Home</Link>
+    </div>
+  );
 }
 
 export default Error;

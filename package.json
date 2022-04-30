@@ -7,8 +7,9 @@
     "node": "14.18.1"
   },
   "scripts": {
-    "dev": "nodemon index.js",
     "prestart": "docker-compose up -d db",
+    "startpostgres": "docker-compose exec db psql -d connect -U anderson_laventure",
+    "dev": "nodemon index.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",

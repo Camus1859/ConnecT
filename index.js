@@ -382,7 +382,7 @@ app.get("/usersInfo", (req, res) => {
   const userid = req.session.userId;
 
   pool.query(
-    `SELECT firstname, lastname, bio, sex, race, inches, my_height_ft, my_height_in FROM users
+    `SELECT firstname, lastname, bio, sex, race, my_height_ft, my_height_in FROM users
         WHERE user_id = $1
         `,
     [userid],
@@ -405,9 +405,8 @@ app.put("/search/user", (req, res) => {
     bio,
     sex,
     race,
-    inches,
-    encountered_persons_height_ft,
-    encountered_persons_height_in,
+    my_height_ft,
+    my_height_in,
   } = req.body;
   let userMessages = { success: [], error: [] };
   const userid = req.session.userId;
@@ -418,19 +417,21 @@ app.put("/search/user", (req, res) => {
     bio === "" ||
     sex === "" ||
     race === "" ||
-    inches === "" ||
-    encountered_persons_height_ft === "" ||
-    encountered_persons_height_in === ""
+    my_height_ft === "" ||
+    my_height_in === ""
   ) {
     userMessages.error.push("Please Fill In All Fields");
     res.send(userMessages);
     return;
   }
+
+    const heightInInches = +my_height_ft * 12 + +my_height_in;
+
   pool.query(
     `UPDATE users set firstname = $1, lastname = $2,
      bio = $3, sex = $4, race = $5, inches = $6,
-     encountered_persons_height_ft = $7,
-     encountered_persons_height_in = $8
+     my_height_ft = $7,
+     my_height_in = $8
      WHERE user_id = $9
     `,
     [
@@ -439,9 +440,9 @@ app.put("/search/user", (req, res) => {
       bio,
       sex,
       race,
-      inches,
-      encountered_persons_height_ft,
-      encountered_persons_height_in,
+      heightInInches,
+      my_height_ft,
+      my_height_in,
       userid,
     ],
     (err, results) => {
